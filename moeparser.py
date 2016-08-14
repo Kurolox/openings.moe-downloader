@@ -6,16 +6,11 @@ import os
 def song_parser():
     requested = requests.get("http://openings.moe/list/")
     souphtml = bs4.BeautifulSoup(requested.text)
-    htmlist = []
     results = []
-    for link in souphtml.find_all("a"):
-        htmlist.append(link.get("href"))
-    # Since I can't make it cleaner I'll manually remove the exceptions
-    for exception in range(4):
-        htmlist.pop(0)
-    # Hey! Now I'm not using Regex! But the code is still as bad as before.
-    for item in htmlist:
-        results.append(item[10:])
+    for item in souphtml.select(".series a"):
+        hrefitem = item.get("href")
+        hrefitem = hrefitem.split("=")
+        results.append(hrefitem[1])
     return results
 
 
